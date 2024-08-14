@@ -1,0 +1,26 @@
+*{
+    margin: 0%;
+    text-decoration: none;
+  }
+
+#d1 {
+    display: flex;
+    align-content: space-between;
+    height: 30px;
+    background-color: aliceblue;
+    }
+  #d1 #nav_bar a:hover{
+    text-decoration: underline;
+  }
+  img{
+    object-fit: contain;
+    width:50px ;
+    height: 100%;
+    border-radius: 50%;
+  }
+  div#d2 {
+    margin: 0%;
+  }
+#logIn #login{
+    color: red;
+}

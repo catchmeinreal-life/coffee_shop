@@ -1,12 +1,13 @@
 import dotenv from 'dotenv';
-dotenv.config(); // Load environment variables from .env file
 
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import bcrypt from 'bcryptjs';
 
+import authenticateJWT from './middleware/authenticateJWT.js'; // Import the JWT authentication middleware
 
+dotenv.config(); // Load environment variables from .env file
 
 
 const app = express();
@@ -66,23 +67,7 @@ app.post('/login', (req, res) => {
     }
 });
 
-const authenticateJWT = (req, res, next) => {  
-    const token = req.headers.authorization;
-    if (token || token.startsWith('Bearer ')) {
 
-        token = token.split(' ')[1]; // Extract the token from the header
-        jwt.verify(token, SECRET_KEY, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-            req.user = user;
-            next();
-        });
-    } else {  
-        res.sendStatus(401);
-        // res.redirect('/login');
-    }
-};
 
 app.get('/index', authenticateJWT, (req, res) => {
     res.send(`Welcome to the index page, ${req.user.username}`);

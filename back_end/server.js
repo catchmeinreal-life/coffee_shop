@@ -1,19 +1,47 @@
 import dotenv from 'dotenv';
+dotenv.config(); // Load environment variables from .env file
+
+const SECRET_KEY = process.env.SECRET_KEYy; // 
+
 
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import bcrypt from 'bcryptjs';
 
+//cookie for storing token
+import cookieParser from 'cookie-parser';
+
+// Middleware
+
 import authenticateJWT from './middleware/authenticateJWT.js'; // Import the JWT authentication middleware
 
-dotenv.config(); // Load environment variables from .env file
-
-
 const app = express();
+
+import ejs from 'ejs';
+app.set('view engine', 'ejs'); // Set EJS as the view engine
+app.set('views', 'views'); // Set the views directory for EJS templates
+app.use(express.static('public')); // Serve static files from the "public" directory
+
+app.use(bodyParser.urlencoded({ extended: true }));// Middleware to parse URL-encoded data
+
+app.use(cookieParser()); //storing token on the browser
+
+import path from 'path';
+import {fileURLToPath} from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+// import { error } from 'console';
+
+
+
+
+
 app.use(bodyParser.json());
 
-const SECRET_KEY = process.env.SECRET_KEY;
+
 
 // Mock database
 const users = [
@@ -32,6 +60,13 @@ const users = [
 ];
 // console.log(users[0].password)
 
+//routes
+
+app.get('/login', (req, res)=>{
+    res.render('login');  //looks for views/login.ejs
+})
+
+/**Store the token as a cookie in /login */
 app.post('/login', (req, res) => {
     const {username, password} = req.body;
     const user = users.find(u => u.username === username); //sql query
@@ -45,10 +80,16 @@ app.post('/login', (req, res) => {
             {
                 id: user.id,
                 username: user.username
-            }, SECRET_KEY, {expiresIn: '1h'});
+            }, SECRET_KEY, {expiresIn: '1h'}
+        ); //send token as cookie or redirect
+        res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: 36000000, // 1 hour
+        });
 
-        res.json({auth: true, token});
-        console.log(`${username} log in`);
+        res.redirect('/index');
+        // res.json({auth: true, token});
+        console.log(`${username} loggen in`);
         // res.redirect('/index');
 
 
@@ -57,20 +98,23 @@ app.post('/login', (req, res) => {
     //     res.status(401).json({auth: false, token: null});  //msg : invalid username or password 
         
     } else {
+        res.status(401).render('login', {error : 'Invalid credentials'});
         console.log(`${username} attempted to log in`);
-        res.status(401).json(
-            {
-                auth: false,
-                token: null,
-                message: 'Invalid username or password'
-            });
+        // res.status(401).json(
+        //     {
+        //         auth: false,
+        //         token: null,
+        //         message: 'Invalid username or password'
+        //     });
     }
 });
 
 
 
 app.get('/index', authenticateJWT, (req, res) => {
-    res.send(`Welcome to the index page, ${req.user.username}`);
+    res.render('index');
+    // res.json({message: 'Welcome to the index page', user: req.user});
+    // res.send(`Welcome to the index page, ${req.user.username}`);
 });
 
 

@@ -23,6 +23,13 @@ use case: Stateless authentication, commonly used in modern web and mobile appli
 
 libraries: jsonwebtoken, express-jwt
 
+This information can be verified and trusted because it is digitally signed.
+
+implementation steps::
+npm install express jsonwebtoken body-parser bcryptjs
+
+
+
 3. session-based Authentication
 
 description: user credentials are stored in a session on the sercer after login. The session ID is stored in a cookie on the client side.

@@ -1,3 +1,5 @@
+const mysql = require("mysql2");
+
 const DB = mysql.createConnection({
     host : "localhost",
     user : process.env.USER, //mysql user name
@@ -6,7 +8,7 @@ const DB = mysql.createConnection({
 })
 
 try {
-    con.connect();
+    DB.connect();
     // console.log('successfull connection..');
     let sql = 'CREATE DATABASE IF NOT EXITS coffee_Shop1;';
     try{
@@ -24,4 +26,4 @@ try {
 }
 
 
-export default connectDB
+export default DB

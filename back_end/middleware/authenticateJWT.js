@@ -24,7 +24,9 @@ const authenticateJWT = (req, res, next) => {
             next();
         });
     }else {
-        res.sendStatus(401); // Unauthorized
+        res.redirect('/login'); // Redirect to login page if token is not present
+        // res.render('login', { message: 'Please login to access this page.' });
+        // res.sendStatus(401); // Unauthorized
     }
 };
 

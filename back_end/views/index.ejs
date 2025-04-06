@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Index</title>
 </head>
 <body>
-    <h1>hello there</h1>
+    <h1>Welcome <%= user.username %>!</h1>
+
+<!-- 
+    <a href="/logout">LogOut</a>
+    <form action="/logout" method="get">
+        <button type="submit">Logout</button>
+    </form> -->
+
+    <button id="logoutBtn">Logout</button>
+
+<script>
+
+    //ajax
+    // Fetch the user data from the server
+    // const fetchUserData = async () => {
+    //     try {
+    //         const response = await fetch('/user');
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         const data = await response.json();
+    //         console.log(data);
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        try {
+            const res = await fetch("/logout", { method: "GET" });
+            if (res.ok) {
+                window.location.href = "/login"; // Redirect manually
+            }
+        } catch (err) {
+            console.error("Logout failed", err);
+        }
+    });
+</script>
+
 </body>
 </html>

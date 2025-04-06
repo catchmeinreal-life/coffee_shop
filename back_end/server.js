@@ -63,7 +63,12 @@ const users = [
 //routes
 
 app.get('/login', (req, res)=>{
-    res.render('login');  //looks for views/login.ejs
+    
+    //check if user is already logged in by checking the cookie
+    if (req.cookies.token) {
+        return res.redirect('/index'); // Redirect to index page if token is present
+    }
+    res.render('login');  //if not logged in, render the login page
 })
 
 /**Store the token as a cookie in /login */
@@ -112,10 +117,19 @@ app.post('/login', (req, res) => {
 
 
 app.get('/index', authenticateJWT, (req, res) => {
-    res.render('index');
+    res.render('index', {user: req.user}); // Render the index page with user data
     // res.json({message: 'Welcome to the index page', user: req.user});
     // res.send(`Welcome to the index page, ${req.user.username}`);
 });
+
+//logout
+app.get('/logout', authenticateJWT, (req, res) => {
+    res.clearCookie('token'); // Clear the cookie
+    res.redirect('/login'); // Redirect to the login page
+    // console.log(`${req.user.username} logged out`); >>add that message
+});
+
+
 
 
 const PORT = process.env.PORT || 3000;

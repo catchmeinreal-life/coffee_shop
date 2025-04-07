@@ -4,6 +4,18 @@
     <title>Index</title>
 </head>
 <body>
+
+    <!-- an alert poppup message -->
+     <% if (messages) { %>
+        <p style="color: green;">
+            <%= messages.success %>
+        </p>
+        <!-- <script>
+            alert("<%= messages.success %>");
+        </script> -->
+    <% } %>
+
+
     <h1>Welcome <%= user.username %>!</h1>
 
 <!-- 

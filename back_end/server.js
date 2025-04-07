@@ -5,9 +5,25 @@ const SECRET_KEY = process.env.SECRET_KEYy; //
 
 
 import express from 'express';
+
+const app = express();
+
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import bcrypt from 'bcryptjs';
+
+//user notification
+import flash from 'connect-flash'; // Flash messages for user notifications
+import session from 'express-session'; // Session management for flash messages
+
+//use session and flash middleware
+app.use(session({
+    secret: process.env.SECRET_KEYy,
+    resave: false,
+    saveUninitialized: true,
+}));
+
+app.use(flash()); // Initialize flash messages
 
 //cookie for storing token
 import cookieParser from 'cookie-parser';
@@ -16,7 +32,6 @@ import cookieParser from 'cookie-parser';
 
 import authenticateJWT from './middleware/authenticateJWT.js'; // Import the JWT authentication middleware
 
-const app = express();
 
 import ejs from 'ejs';
 app.set('view engine', 'ejs'); // Set EJS as the view engine
@@ -36,9 +51,7 @@ const __dirname = path.dirname(__filename);
 // import { error } from 'console';
 
 
-
-
-
+// Middleware to parse JSON data
 app.use(bodyParser.json());
 
 
@@ -66,9 +79,12 @@ app.get('/login', (req, res)=>{
     
     //check if user is already logged in by checking the cookie
     if (req.cookies.token) {
-        return res.redirect('/index'); // Redirect to index page if token is present
+        return res.redirect('/index'); // Redirect to index page if token is present >>logged in
     }
-    res.render('login');  //if not logged in, render the login page
+    res.render('login', {
+        error: req.flash('error'), // Pass flash error message to the login page
+        messages: req.flash('success'), // Pass flash success message to the login page
+    });  //if not logged in, render the login page
 })
 
 /**Store the token as a cookie in /login */
@@ -103,7 +119,7 @@ app.post('/login', (req, res) => {
     //     res.status(401).json({auth: false, token: null});  //msg : invalid username or password 
         
     } else {
-        res.status(401).render('login', {error : 'Invalid credentials'});
+        res.status(401).render('login', {error : 'Invalid credentials', messages: {}}); // Render the login page with an error message
         console.log(`${username} attempted to log in`);
         // res.status(401).json(
         //     {
@@ -117,7 +133,10 @@ app.post('/login', (req, res) => {
 
 
 app.get('/index', authenticateJWT, (req, res) => {
-    res.render('index', {user: req.user}); // Render the index page with user data
+    res.render('index', {
+        user: req.user, // Pass the user object data to the index page
+        messages: req.flash('success'), // Pass flash success message to the index page
+    }); 
     // res.json({message: 'Welcome to the index page', user: req.user});
     // res.send(`Welcome to the index page, ${req.user.username}`);
 });
@@ -125,7 +144,9 @@ app.get('/index', authenticateJWT, (req, res) => {
 //logout
 app.get('/logout', authenticateJWT, (req, res) => {
     res.clearCookie('token'); // Clear the cookie
+    req.flash('success', 'Logged out successfully'); // Set flash message
     res.redirect('/login'); // Redirect to the login page
+    // res.json({message: 'Logged out successfully'});
     // console.log(`${req.user.username} logged out`); >>add that message
 });
 

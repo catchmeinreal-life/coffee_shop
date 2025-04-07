@@ -119,7 +119,10 @@ app.post('/login', (req, res) => {
     //     res.status(401).json({auth: false, token: null});  //msg : invalid username or password 
         
     } else {
-        res.status(401).render('login', {error : 'Invalid credentials', messages: {}}); // Render the login page with an error message
+        res.status(401).render('login', {
+            error : 'Invalid credentials',
+            messages: {}
+        }); // Render the login page with an error message
         console.log(`${username} attempted to log in`);
         // res.status(401).json(
         //     {
@@ -143,10 +146,12 @@ app.get('/index', authenticateJWT, (req, res) => {
 
 //logout
 app.get('/logout', authenticateJWT, (req, res) => {
+
     res.clearCookie('token'); // Clear the cookie
     req.flash('success', 'Logged out successfully'); // Set flash message
     res.redirect('/login'); // Redirect to the login page
     // res.json({message: 'Logged out successfully'});
+    // res.send('Logged out successfully');
     // console.log(`${req.user.username} logged out`); >>add that message
 });
 

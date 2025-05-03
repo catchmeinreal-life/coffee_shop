@@ -18,26 +18,13 @@
 
     <h1>Welcome <%= user.username %>!</h1>
 
-<!-- 
-    <a href="/logout">LogOut</a>
-    <form action="/logout" method="get">
-        <button type="submit">Logout</button>
-    </form> -->
+
 
     <button id="logoutBtn">Logout</button>
 
 <script>
 
-    //ajax
-    // Fetch the user data from the server
-    // const fetchUserData = async () => {
-    //     try {
-    //         const response = await fetch('/user');
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //         const data = await response.json();
-    //         console.log(data);
+   
     document.getElementById("logoutBtn").addEventListener("click", async () => {
         try {
             const res = await fetch("/logout", { method: "GET" });

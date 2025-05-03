@@ -102,27 +102,25 @@ app.post('/login', (req, res) => {
                 id: user.id,
                 username: user.username
             }, SECRET_KEY, {expiresIn: '1h'}
-        ); //send token as cookie or redirect
-        res.cookie('token', token, {
+        ); 
+        res.cookie('token', token, { //send token as cookie or redirect
             httpOnly: true,
             maxAge: 36000000, // 1 hour
         });
 
         res.redirect('/index');
         // res.json({auth: true, token});
-        console.log(`${username} loggen in`);
-        // res.redirect('/index');
-
+        console.log(`${username} logged in`);
 
 
     // } else if (user && !bcrypt.compareSync(password, user.password)) {
     //     res.status(401).json({auth: false, token: null});  //msg : invalid username or password 
         
     } else {
-        res.status(401).render('login', {
+        res.status(401).render('login', { // Render the login page with an error message
             error : 'Invalid credentials',
             messages: {}
-        }); // Render the login page with an error message
+        }); 
         console.log(`${username} attempted to log in`);
         // res.status(401).json(
         //     {

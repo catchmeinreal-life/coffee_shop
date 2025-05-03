@@ -2,11 +2,11 @@ source:: https://apidog.com/blog/node-js-express-authentication/
 
 AUTHENTICATION: the process of verifying the identity of a user,, "who are you?".
 
-AUTHORIZTION: the process of determining what an autjenticated user is allowed to do. "what can you do?".
+AUTHORIZTION: the process of determining what an authenticated user is allowed to do. "what can you do?".
 
 Stateless vs. Stateful authentication: in stateless authentication the server does not maintain any session data. Each request is independent and must contain all the necessary information for authentication, typically through tokens (e.g JWT)
 
-Statefull Authentication: in this method the server maintains session data for authenticated users, often stored in a database or memory. The client holds a session ID to access thr stored session data.
+Statefull Authentication: in this method the server maintains session data for authenticated users, often stored in a database or memory. The client holds a session ID to access the stored session data.
 
 
 COMMON NODE.js Express Authentication methods.
@@ -32,7 +32,7 @@ npm install express jsonwebtoken body-parser bcryptjs
 
 3. session-based Authentication
 
-description: user credentials are stored in a session on the sercer after login. The session ID is stored in a cookie on the client side.
+description: user credentials are stored in a session on the server after login. The session ID is stored in a cookie on the client side.
 
 Use case: Traditional web applications where server-side sessions are manageable.
 example libraries: express-session, connect-mongo.
@@ -46,7 +46,7 @@ example: passport, passport-google-oauth20, passport-facebook, passport-github.
 
 5.Social login
 description: Authentication through social media accounts like google, facebook, or twitter.
-use case: Allows user to login in using their socia media accounts, simplifyig the login process.
+use case: Allows user to login in using their social media accounts, simplifying the login process.
 example: passport-google-oauth20, passport-facebook, passport-twitter.
 
 6. Multi-factor Authentication.
@@ -60,7 +60,7 @@ Example libraries: speakeasy(for OTP generation), node-2fa
 
 des: users include an API key in the request header of each API CALL.
 USE case: commonly use for service-to-service communication for public APIS.
-Example Libraries: No specific library required, implementes by checking the api key in the reques header.
+Example Libraries: No specific library required, implements by checking the api key in the request header.
 
 8. LDAP Authentication
 Description: Authenticates users against a directory service like Microsoft Active Directory. 
